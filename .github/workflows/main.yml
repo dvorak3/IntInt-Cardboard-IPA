@@ -1,0 +1,33 @@
+name: Build IPA sin firmar
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Archive con xcodebuild
+        run: |
+          xcodebuild archive \
+            -project Unity-iPhone.xcodeproj \
+            -scheme Unity-iPhone \
+            -configuration Release \
+            -sdk iphoneos \
+            -archivePath "$RUNNER_TEMP/app.xcarchive" \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Empaquetar .ipa
+        run: |
+          mkdir Payload
+          cp -R "$RUNNER_TEMP"/app.xcarchive/Products/Applications/*.app Payload/
+          zip -r Cardboard.ipa Payload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Cardboard-ipa
+          path: Cardboard.ipa
