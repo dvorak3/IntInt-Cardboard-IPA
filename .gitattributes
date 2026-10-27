@@ -1,0 +1,2 @@
+Frameworks/UnityRuntime.framework/UnityRuntime filter=lfs diff=lfs merge=lfs -text
+Libraries/com.google.xr.cardboard/Runtime/iOS/GfxPluginCardboard.a filter=lfs diff=lfs merge=lfs -text
